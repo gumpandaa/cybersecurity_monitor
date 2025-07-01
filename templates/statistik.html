@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Statistik</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+<div class="container py-5">
+    <h2 class="mb-4">📊 Statistik Analisis Keamanan</h2>
+    <ul class="list-group">
+        <li class="list-group-item">Total Email Dianalisis: {{ total }}</li>
+        <li class="list-group-item">Skor Rata-rata: {{ rata_rata|round(2) }}</li>
+    </ul>
+
+    <h4 class="mt-4">Distribusi Status Keamanan</h4>
+    <ul class="list-group">
+        {% for status, count in status_count %}
+        <li class="list-group-item">{{ status }}: {{ count }}</li>
+        {% endfor %}
+    </ul>
+
+    <a href="{{ url_for('data') }}" class="btn btn-secondary mt-4">← Kembali ke Data</a>
+</div>
+</body>
+</html>

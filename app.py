@@ -162,5 +162,14 @@ def logout():
     logout_user()
     return "<script>location.href='/';</script>"
 
+@app.route('/statistik')
+@login_required
+def statistik():
+    total = HasilAnalisis.query.count()
+    rata_rata = db.session.query(db.func.avg(HasilAnalisis.skor)).scalar()
+    status_count = db.session.query(HasilAnalisis.status, db.func.count()).group_by(HasilAnalisis.status).all()
+    return render_template('statistik.html', total=total, rata_rata=rata_rata, status_count=status_count)
+
+
 if __name__ == '__main__':
     app.run(debug=True)
