@@ -132,6 +132,18 @@ def data():
     hasil_list = HasilAnalisis.query.order_by(HasilAnalisis.tanggal.desc()).all()
     return render_template('data.html', hasil_list=hasil_list)
 
+@app.route('/statistik')
+@login_required
+def statistik():
+    jumlah_analisis = HasilAnalisis.query.count()
+    rata_rata_skor = db.session.query(db.func.avg(HasilAnalisis.skor)).scalar()
+    tingkat_status = db.session.query(HasilAnalisis.status, db.func.count(HasilAnalisis.id)).group_by(HasilAnalisis.status).all()
+
+    return render_template('statistik.html',
+                           jumlah=jumlah_analisis,
+                           rata_rata=round(rata_rata_skor or 0, 2),
+                           distribusi=tingkat_status)
+
 @app.route('/hapus/<int:id>', methods=['POST'])
 @login_required
 def hapus(id):
@@ -161,15 +173,6 @@ def login():
 def logout():
     logout_user()
     return "<script>location.href='/';</script>"
-
-@app.route('/statistik')
-@login_required
-def statistik():
-    total = HasilAnalisis.query.count()
-    rata_rata = db.session.query(db.func.avg(HasilAnalisis.skor)).scalar()
-    status_count = db.session.query(HasilAnalisis.status, db.func.count()).group_by(HasilAnalisis.status).all()
-    return render_template('statistik.html', total=total, rata_rata=rata_rata, status_count=status_count)
-
 
 if __name__ == '__main__':
     app.run(debug=True)
