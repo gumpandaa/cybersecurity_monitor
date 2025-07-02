@@ -87,8 +87,18 @@ def analisis():
         if pelanggaran is None:
             return "<h2>Gagal memeriksa breach (jaringan atau API error)</h2>"
 
+        layanan_populer = ['linkedin', 'facebook', 'twitter', 'gmail', 'dropbox', 'tiktok', 'telegram', 'instagram']
+        layanan_terdeteksi = []
+
         if pelanggaran:
             score = hitung_skor(pelanggaran)
+
+            for pel in pelanggaran:
+                name = pel.get('Name', '').lower()
+                for layanan in layanan_populer:
+                    if layanan in name and layanan not in layanan_terdeteksi:
+                        layanan_terdeteksi.append(layanan)
+
             if score >= 90:
                 status = "Sangat Aman ✅"
             elif score >= 70:
@@ -97,6 +107,7 @@ def analisis():
                 status = "Waspada ⚠️"
             else:
                 status = "Bahaya ❌"
+
             rekomendasi = [
                 "Segera ganti password yang digunakan di akun-akun lama.",
                 "Aktifkan verifikasi dua langkah (2FA).",
@@ -105,6 +116,7 @@ def analisis():
         else:
             score = 100
             status = "Sangat Aman ✅"
+            layanan_terdeteksi = []
             rekomendasi = [
                 "Akun Anda tidak ditemukan di pelanggaran data.",
                 "Tetap gunakan password kuat dan unik.",
@@ -121,7 +133,15 @@ def analisis():
         db.session.add(hasil)
         db.session.commit()
 
-        return render_template('hasil.html', email=email, score=score, status=status, pelanggaran=pelanggaran, rekomendasi=rekomendasi)
+        return render_template(
+            'hasil.html',
+            email=email,
+            score=score,
+            status=status,
+            pelanggaran=pelanggaran,
+            rekomendasi=rekomendasi,
+            layanan_terdeteksi=layanan_terdeteksi
+        )
 
     except EmailNotValidError as e:
         return f"<h2>Email tidak valid: {e}</h2>"

@@ -45,6 +45,17 @@
         {% endfor %}
       </ul>
 
+      <h5>Layanan Populer yang Terkena:</h5>
+      {% if layanan_terdeteksi %}
+      <ul>
+        {% for layanan in layanan_terdeteksi %}
+          <li>{{ layanan }}</li>
+        {% endfor %}
+      </ul>
+      {% else %}
+      <p><em>Tidak ada layanan populer yang terdeteksi.</em></p>
+      {% endif %}
+
       <div class="text-center">
         <a href="/" class="btn btn-secondary">🔁 Cek Email Lain</a>
       </div>
