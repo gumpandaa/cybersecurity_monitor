@@ -8,11 +8,13 @@
 <body class="bg-light">
 <div class="container py-4">
     <h2 class="mb-4">📋 Riwayat Analisis</h2>
-    <a href="{{ url_for('statistik') }}" class="btn btn-info">Lihat Statistik</a>
+    <div class="mb-3 d-flex justify-content-end">
+        <a href="{{ url_for('statistik') }}" class="btn btn-info">Lihat Statistik</a>
+    </div>
     <table class="table table-bordered table-hover bg-white">
         <thead class="table-dark">
             <tr>
-                <th>#</th>
+                <th>no</th>
                 <th>Email</th>
                 <th>Skor</th>
                 <th>Status</th>
